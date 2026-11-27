@@ -1,5 +1,5 @@
 /**
- * EVA 1.0.1 — serviço seguro de conversação (Cloudflare Worker, ES module).
+ * EVA 1.0.3 — serviço seguro de conversação (Cloudflare Worker, ES module).
  * Chaves e código de acesso APENAS nas variáveis Secret do Worker.
  * Endpoint público não é autenticação de utilizadores; esta versão é um piloto privado.
  */
@@ -154,7 +154,7 @@ export default {
     }
     if(origin!==allowed) return new Response('Origem não autorizada.',{status:403,headers:{'Cache-Control':'no-store'}});
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:cors(origin)});
-    if(request.method==='GET'&&url.pathname==='/health')return json({ok:true,service:'eva-ia',version:'1.0.1'},200,origin);
+    if(request.method==='GET'&&url.pathname==='/health')return json({ok:true,service:'eva-ia',version:'1.0.3'},200,origin);
     if(request.method!=='POST'||!['/session','/chat'].includes(url.pathname))return json({error:'Endpoint não encontrado.'},404,origin);
     if(!env.GEMINI_API_KEY||!env.EVA_ACCESS_CODE||!env.EVA_SIGNING_SECRET)return json({error:'Configuração do servidor incompleta.'},503,origin);
     const ip=request.headers.get('CF-Connecting-IP')||'unknown';
@@ -673,12 +673,13 @@ async function centralEndpoint(request,env,origin,alexa){
  async function preparePellets(p){
   state.pending=p;
   if(p.bags===0){clearPending();return finish('Pedido cancelado. Não registei pellets.');}
-  if(!Number.isInteger(p.bags)||p.bags<1||p.bags>30){p.phase='quantity';return finish('Quantos sacos de pellets? Indique entre um e trinta sacos inteiros, ou zero para cancelar.');}
+  if(p.bags==null){p.phase='quantity';return finish('Quantos sacos?');}
+  if(!Number.isInteger(p.bags)||p.bags<1||p.bags>30){p.phase='quantity';return finish('Indique entre um e trinta sacos inteiros, ou zero para cancelar.');}
   if(!p.box){p.phase='box';return finish('Qual é a boxe e em que pátio?');}
   const d=await pellets({action:'prepare',bags:p.bags,box:p.box,patio:p.patio||''});
   if(!d.confirmation||!Number.isFinite(Date.parse(d.expiresAt)))throw Error('prepare');
   state.pending={type:'pellets',phase:'confirm',confirmation:d.confirmation,expires:Date.parse(d.expiresAt)};
-  return finish('Confirma '+p.bags+' sacos de pellets de quinze quilos para '+d.horse+', na boxe '+d.box+', '+d.patio+'? Diga sim ou não.');
+  return finish('Confirma '+p.bags+(p.bags===1?' saco':' sacos')+' de cama para '+d.horse+'?');
  }
  try{
   if(['pellets','pellet-intent'].includes(state.pending?.type)&&/^(0|zero)( sacos?)?$/.test(q)){const attempted=state.pending.attempted;clearPending();return finish(attempted?'Cancelei a continuação do pedido. Já houve uma tentativa de gravação; verifique o movimento na aplicação. O zero não anula uma baixa já gravada.':'Pedido cancelado. Não registei pellets.');}
@@ -711,7 +712,7 @@ async function centralEndpoint(request,env,origin,alexa){
   }
   if(pelletRequest){
    clearPending();const b=q.match(/\bbox(?:e)? (?:numero )?(\d+|\w+)\b/),s=q.match(/\b(\d+|\w+) sacos?\b/),patio=q.match(/\b(?:do|no|da|na) (patio .+)$/)?.[1]||'';
-   const p={type:'pellets',phase:'quantity',box:b&&num(b[1])>0?String(num(b[1])):null,bags:s?num(s[1]):undefined,patio,expires:Date.now()+180000};
+   const p={type:'pellets',phase:'quantity',box:b&&num(b[1])>0?String(num(b[1])):null,bags:s&&num(s[1])>=0?num(s[1]):undefined,patio,expires:Date.now()+180000};
    if(!p.box){
     const name=b&&num(b[1])<=0?q.match(/\bbox(?:e)? (.+?)(?: (?:do|no) patio .+)?$/)?.[1]:q.match(/\b(?:para|do|da|no|na) (?:o |a |cavalo |egua )?(.+)$/)?.[1];
     if(name&&!name.startsWith('box')){
@@ -728,7 +729,7 @@ async function centralEndpoint(request,env,origin,alexa){
    if(p.type==='pellets'&&p.phase!=='confirm'){
     const b=q.match(/\bbox(?:e)? (\d+|\w+)\b/),s=q.match(/^(?:foram |sao )?(\d+|\w+)(?: sacos?)?$/),patio=q.match(/(?:^|\b(?:no|do|na|da) )(patio .+)$/)?.[1];
     if(b&&num(b[1])>0)p.box=String(num(b[1]));if(s&&num(s[1])>=0)p.bags=num(s[1]);if(patio)p.patio=patio;
-    if(!b&&!s&&!patio)return finish(p.phase==='quantity'?'Quantos sacos de pellets?':'Indique a boxe e o pátio.');
+    if(!b&&!s&&!patio)return finish(p.phase==='quantity'?'Quantos sacos?':'Indique a boxe e o pátio.');
     return await preparePellets(p);
    }
    if(p.type==='task'&&p.phase==='employee'){
@@ -743,7 +744,7 @@ async function centralEndpoint(request,env,origin,alexa){
     if(p.type==='task'){p.phase='employee';return finish('Quem realizou a tarefa? Diga António, Vinicius, Igor ou Tiago.');}
     p.attempted=true;
     if(p.type==='booking'){const d=await task({action:'confirm',confirmation:p.confirmation});if(d.status!=='confirmed')throw Error('confirm');clearPending();delete state.page;return finish('Marcação confirmada. Continua na lista de pendentes até ser concluída.');}
-    if(p.type==='pellets'){const d=await pellets({action:'complete',confirmation:p.confirmation});if(d.status!=='recorded')throw Error('record');clearPending();return finish('Registei '+d.bags+' sacos de pellets, '+d.kg+' quilos, para '+d.horse+', na boxe '+d.box+', '+d.patio+'.');}
+    if(p.type==='pellets'){const d=await pellets({action:'complete',confirmation:p.confirmation});if(d.status!=='recorded')throw Error('record');clearPending();return finish('Registei '+d.bags+(d.bags===1?' saco':' sacos')+' de cama para '+d.horse+'.');}
    }
    return finish('Há um pedido por confirmar. Diga sim ou não, ou faça uma nova consulta.');
   }

@@ -1,5 +1,5 @@
 'use strict';
-// EVA 1.0.1 — Skill Alexa independente da skill Pátio 57.
+// EVA 1.0.3 — Skill Alexa independente da skill Pátio 57.
 // A credencial da Alexa é lida da tabela DynamoDB da própria skill (piloto privado).
 // NUNCA escrever a chave Gemini, o código EVA web ou o segredo Alexa neste ficheiro.
 const Alexa = require('ask-sdk-core');
@@ -392,7 +392,8 @@ const PelletsHandler={
     delete attrs.pendingPellets;save();return say('Registei '+r.bags+' sacos de pellets, '+r.kg+' quilos, para '+r.horse+', na boxe '+r.box+', '+r.patio+'.');
    }catch(e){return taskFailure(input,e);}
   }
-  if(n==='EVAPelletsBoxIntent')p={box:Alexa.getSlotValue(input.requestEnvelope,'boxe'),patio:resolvedPatio(input),bags:Alexa.getSlotValue(input.requestEnvelope,'sacos'),expires:Date.now()+180000};
+  if(n==='EVAPelletsHorseIntent')return 'regista sacos de cama para '+(slot('pergunta')||'');
+ if(n==='EVAPelletsBoxIntent')p={box:Alexa.getSlotValue(input.requestEnvelope,'boxe'),patio:resolvedPatio(input),bags:Alexa.getSlotValue(input.requestEnvelope,'sacos'),expires:Date.now()+180000};
   else {
    if(!p||p.expires<Date.now()||!['patio','quantity'].includes(p.phase)){delete attrs.pendingPellets;save();return say('Repita o pedido completo de pellets, com a boxe e a quantidade.');}
    if(n==='EVAPelletsPatioIntent')p.patio=resolvedPatio(input);
@@ -477,6 +478,7 @@ function centralUtterance(input){
  if(n==='EVAHorseSearchIntent')return 'localiza '+(slot('pergunta')||'');
  if(n==='EVAHorseLocationIntent')return 'localiza '+(slot('cavalo')||'');
  if(n==='EVABoxLocationIntent')return 'quem está na boxe '+(slot('boxe')||'')+(patio?' do '+patio:'');
+ if(n==='EVAPelletsHorseIntent')return 'regista sacos de cama para '+(slot('pergunta')||'');
  if(n==='EVAPelletsBoxIntent')return 'regista '+(slot('sacos')!=null?slot('sacos')+' sacos de ':'')+'pellets na boxe '+(slot('boxe')||'')+(patio?' do '+patio:'');
  if(n==='EVAPelletsQuantityIntent')return slot('sacos')||'';
  if(n==='EVAPelletsPatioIntent')return patio?'no '+patio:'';

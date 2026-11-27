@@ -1,5 +1,5 @@
 /**
- * EVA 1.0.0 — serviço seguro de conversação (Cloudflare Worker, ES module).
+ * EVA 1.0.1 — serviço seguro de conversação (Cloudflare Worker, ES module).
  * Chaves e código de acesso APENAS nas variáveis Secret do Worker.
  * Endpoint público não é autenticação de utilizadores; esta versão é um piloto privado.
  */
@@ -154,7 +154,7 @@ export default {
     }
     if(origin!==allowed) return new Response('Origem não autorizada.',{status:403,headers:{'Cache-Control':'no-store'}});
     if(request.method==='OPTIONS')return new Response(null,{status:204,headers:cors(origin)});
-    if(request.method==='GET'&&url.pathname==='/health')return json({ok:true,service:'eva-ia',version:'1.0.0'},200,origin);
+    if(request.method==='GET'&&url.pathname==='/health')return json({ok:true,service:'eva-ia',version:'1.0.1'},200,origin);
     if(request.method!=='POST'||!['/session','/chat'].includes(url.pathname))return json({error:'Endpoint não encontrado.'},404,origin);
     if(!env.GEMINI_API_KEY||!env.EVA_ACCESS_CODE||!env.EVA_SIGNING_SECRET)return json({error:'Configuração do servidor incompleta.'},503,origin);
     const ip=request.headers.get('CF-Connecting-IP')||'unknown';
@@ -194,7 +194,8 @@ function geminiHistory(contents){
   return turns;
 }
 
-async function generateGemini(contents,env,origin,maxTokens,extraInstructions=""){
+async function generateGemini(contents,env,origin,maxTokens,extraInstructions="",operational=false){
+  const prompt=operational?SYSTEM_PROMPT.replace('Este serviço tem acesso à memória de conversas, mas ainda não tem uma ligação operacional autenticada às informações do pátio.','Esta sessão está autenticada no pátio. As ferramentas de cavalos, tarefas, marcações e registo de pellets estão ligadas ao pátio. Pedidos operacionais são executados pelo núcleo, nunca por esta resposta de conversa. Se o utilizador perguntar como fazer uma baixa, explique: diga regista dois sacos de pellets para Lírio, ou indique boxe e pátio; depois confirme. Zero cancela um pedido pendente, não anula um movimento já gravado.'):SYSTEM_PROMPT;
   const voice=Number.isFinite(env[VOICE_DEADLINE]);
   const remaining=voice?env[VOICE_DEADLINE]-Date.now()-450:23000;
   function fail(code,message,status,details={}){
@@ -214,7 +215,7 @@ async function generateGemini(contents,env,origin,maxTokens,extraInstructions=""
     const response=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`,{
       method:'POST',signal:controller.signal,
       headers:{'Content-Type':'application/json','x-goog-api-key':env.GEMINI_API_KEY},
-      body:JSON.stringify({systemInstruction:{parts:[{text:SYSTEM_PROMPT+extraInstructions+voiceInstruction}]},contents:geminiHistory(contents),generationConfig})
+      body:JSON.stringify({systemInstruction:{parts:[{text:prompt+extraInstructions+voiceInstruction}]},contents:geminiHistory(contents),generationConfig})
     });
     if(!response.ok){
       const codes={400:'AI_REQUEST_INVALID',401:'AI_AUTH',403:'AI_PERMISSION',404:'AI_MODEL_NOT_FOUND',429:'AI_RATE_LIMIT'};
@@ -654,7 +655,7 @@ async function centralEndpoint(request,env,origin,alexa){
  const label=t=>[t.title,t.horse,t.day,t.time].filter(Boolean).join(', ');
  const words=['zero','um','dois','tres','quatro','cinco','seis','sete','oito','nove','dez','onze','doze','treze','catorze','quinze','dezasseis','dezassete','dezoito','dezanove','vinte'];
  const num=v=>/^\d+$/.test(v||'')?Number(v):({'uma':1,'duas':2,'quatorze':14,'dezesseis':16,'dezessete':17,'dezenove':19}[v]??words.indexOf(v));
- const q=patioNormalize(body.text).replace(/^eva /,'');
+ let q=patioNormalize(body.text).replace(/^eva /,'');
  const yes=/^(sim|confirmo|confirmar|confirma|esta certo|certo)$/.test(q),no=/^(nao|cancelar|cancela)$/.test(q);
  const taskIndex=q.match(/\b(?:tarefa|marcacao) (\d+|\w+)\b/);
  const isList=/\b(tarefas?|marcacoes?)\b/.test(q)&&/\b(pendentes?|hoje|fazer|concluir|confirmar|lista|todas|quais)\b/.test(q)&&!/^conclu|^termin|^confirm|^aceit|^marca a/.test(q);
@@ -680,9 +681,11 @@ async function centralEndpoint(request,env,origin,alexa){
   return finish('Confirma '+p.bags+' sacos de pellets de quinze quilos para '+d.horse+', na boxe '+d.box+', '+d.patio+'? Diga sim ou não.');
  }
  try{
-  if(state.pending?.type==='pellets'&&/^(0|zero)( sacos?)?$/.test(q)){const attempted=state.pending.attempted;clearPending();return finish(attempted?'Cancelei a continuação do pedido. Já houve uma tentativa de gravação; verifique o movimento na aplicação. O zero não anula uma baixa já gravada.':'Pedido cancelado. Não registei pellets.');}
+  if(['pellets','pellet-intent'].includes(state.pending?.type)&&/^(0|zero)( sacos?)?$/.test(q)){const attempted=state.pending.attempted;clearPending();return finish(attempted?'Cancelei a continuação do pedido. Já houve uma tentativa de gravação; verifique o movimento na aplicação. O zero não anula uma baixa já gravada.':'Pedido cancelado. Não registei pellets.');}
   if(restart||no){const attempted=state.pending?.attempted;state={};return finish((attempted?'Houve uma tentativa de gravação. Verifique a aplicação antes de repetir. ':'')+'Vamos começar um novo pedido.');}
   if(state.pending?.expires&&state.pending.expires<Date.now()){clearPending();if(yes)return finish('A confirmação expirou. Repita o pedido completo.');}
+  if(yes&&state.pending?.type==='pellet-intent'){body.text=state.pending.normalized;q=patioNormalize(body.text);clearPending();}
+  if(/^toallet\b/.test(q)&&/\bbox(?:e)?\b/.test(q)){state.pending={type:'pellet-intent',normalized:q.replace(/^toallet\b/,'pellets'),expires:Date.now()+180000};return finish('Ouvi toallet. Pretende registar pellets para essa boxe ou cavalo? Diga sim ou não.');}
   if(isList){clearPending();return await list(0);}
   if(more||yes&&!state.pending&&state.page){if(!state.page||state.page.expires<Date.now())return finish('Peça novamente as tarefas pendentes.');if(state.page.offset+state.page.tasks.length>=state.page.total)return finish('Já li todas as tarefas desta lista. Peça novamente as tarefas pendentes para atualizar.');return await list(state.page.offset+state.page.tasks.length);}
   if(/^conclu|^terminei|^marca a tarefa/.test(q)&&taskIndex){
@@ -701,16 +704,16 @@ async function centralEndpoint(request,env,origin,alexa){
    return finish('Confirma que aceita a marcação '+label(d.task)+'? Continuará pendente até ser concluída.');
   }
   // Novas consultas interrompem o diálogo anterior, antes de interpretar respostas curtas.
+  const pelletRequest=/\b(?:pellets?|peletes?|pelletes|pelets)\b/.test(q)||/\bsacos? de cama\b/.test(q)&&/\b(regista|registar|baixa|desconta|descontar|coloquei|pus)\b/.test(q);
   const query=patioQuery(body.text);
-  if(query&&!['write','unsupported'].includes(query.kind)&&!(state.pending?.type==='pellets'&&state.pending.phase!=='confirm'&&query.kind==='box')){
+  if(query&&!pelletRequest&&!['write','unsupported'].includes(query.kind)&&!(state.pending?.type==='pellets'&&state.pending.phase!=='confirm'&&query.kind==='box')){
    clearPending();delete state.page;const r=await patioRead(body.text,token,patioEnv,origin);const d=await r.json();if(r.status!==200)throw Object.assign(Error('read'),{code:d.code});return finish(d.answer);
   }
-  const pelletRequest=/\b(pellets|peletes)\b/.test(q);
   if(pelletRequest){
    clearPending();const b=q.match(/\bbox(?:e)? (?:numero )?(\d+|\w+)\b/),s=q.match(/\b(\d+|\w+) sacos?\b/),patio=q.match(/\b(?:do|no|da|na) (patio .+)$/)?.[1]||'';
    const p={type:'pellets',phase:'quantity',box:b&&num(b[1])>0?String(num(b[1])):null,bags:s?num(s[1]):undefined,patio,expires:Date.now()+180000};
    if(!p.box){
-    const name=q.match(/\b(?:para|do|da|no|na) (?:o |a |cavalo |egua )?(.+)$/)?.[1];
+    const name=b&&num(b[1])<=0?q.match(/\bbox(?:e)? (.+?)(?: (?:do|no) patio .+)?$/)?.[1]:q.match(/\b(?:para|do|da|no|na) (?:o |a |cavalo |egua )?(.+)$/)?.[1];
     if(name&&!name.startsWith('box')){
      const r=await fetch(P57_URL+'/rest/v1/rpc/eva_patio57_read',{method:'POST',headers:{Authorization:'Bearer '+token,apikey:patioEnv.P57_SUPABASE_PUBLISHABLE_KEY,'Content-Type':'application/json'},body:JSON.stringify({operation:'horses',argument:null}),signal:AbortSignal.timeout(4000),redirect:'manual'});
      if(!r.ok)throw Object.assign(Error('read'),{code:r.status===403?'PATIO_FORBIDDEN':'PATIO_UNAVAILABLE'});const rows=await r.json();if(!Array.isArray(rows))throw Error('horses');const m=patioMatchNames(name,rows);
@@ -748,7 +751,7 @@ async function centralEndpoint(request,env,origin,alexa){
   if(query)return finish('Essa operação ainda não está ligada à EVA central. Já pode consultar cavalos, tarefas e marcações, concluir tarefas e registar pellets.');
   if(!throttle('central-ai:'+user.id,12))return finish('A conversa com a IA atingiu o limite temporário. Aguarde um minuto. As consultas do pátio continuam disponíveis.');
   const current=[...(state.history||[]).slice(-4),{role:'user',text:body.text}];const contents=normalizeHistory(current);
-  const r=await generateGemini(contents,env,origin,650,'Nesta sessão autenticada, a EVA central tem ferramentas para consultar cavalos, tarefas e marcações, concluir tarefas com funcionário e registar pellets após confirmação. As perguntas operacionais são tratadas antes desta conversa. Não inventes dados nem resultados de ações.');const d=await r.json();if(r.status!==200)return finish(d.error||'Não consegui responder nesta tentativa.');
+  const r=await generateGemini(contents,env,origin,650,'Nesta sessão autenticada, a EVA central tem ferramentas para consultar cavalos, tarefas e marcações, concluir tarefas com funcionário e registar pellets após confirmação. As perguntas operacionais são tratadas antes desta conversa. Não inventes dados nem resultados de ações.',true);const d=await r.json();if(r.status!==200)return finish(d.error||'Não consegui responder nesta tentativa.');
   state.history=[...current,{role:'model',text:d.answer}].slice(-4);return finish(d.answer);
  }catch(e){
   if(e.code==='PELLETS_AMBIGUOUS'&&state.pending?.type==='pellets')state.pending.phase='patio';

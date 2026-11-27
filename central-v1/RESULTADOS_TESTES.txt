@@ -27,9 +27,14 @@ OK recomeçar avisa sobre tentativa de gravação incerta
 OK saúde sem ferramenta nunca é inventada
 OK zero também cancela depois da pergunta de confirmação
 OK zero após falha de gravação não promete anular movimento existente
-29 testes do núcleo central aprovados; sem operações reais.
-
-Adaptador Alexa: 6 encaminhamentos e continuidade para a EVA central aprovados.
+OK frase ouvida toallet na boxe Lírio exige esclarecimento antes de preparar
+OK não ao esclarecimento de toallet não altera stock
+OK pellets na boxe Lírio resolve o nome atual sem gravar
+OK singular pellet não é confundido com consulta por boxe
+OK sacos de cama com registo é alternativa portuguesa para pellets
+OK botão inicia pellets sem assumir número de sacos ou boxe
+OK conversa central não recebe a instrução antiga sem ligação operacional
+36 testes do núcleo central aprovados; sem operações reais.
 
 OK 12 tarefas lidas com sim/continua sem omissões
 OK pedido por concluir encaminhado para tarefas
@@ -67,4 +72,5 @@ OK consulta por boxe filtra o pátio e dispensa catálogo
 OK limite de leitura é explícito e isolado por conta mesmo atrás do mesmo IP
 Total: 33 testes JavaScript aprovados, com serviços simulados e sem baixas reais.
 
-Interface DOM aprovada com HTTP simulado. Chromium/voz real não verificados.
+Adaptador Alexa: 6 encaminhamentos aprovados na versão anterior, sem alterações nesta correção.
+Interface DOM aprovada, voz real por testar.

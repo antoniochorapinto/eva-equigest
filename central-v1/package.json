@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "eva-patio-central",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "test": "node testes-central.mjs && node teste-adaptador.cjs && node teste-dom.cjs && node regressao/testes.mjs"
   },

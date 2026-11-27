@@ -1,4 +1,4 @@
-# EVA central 1.0.0 — teste separado
+# EVA central 1.0.1 — teste separado
 
 A página anterior `/teste-ia/`, os três ficheiros da Alexa 0.9.1, as funções SQL, as tabelas, as memórias anteriores e os anúncios Voice Monkey são preservados. Esta versão acrescenta `/eva/chat` para o PC e `/alexa/conversation` para o adaptador opcional. Os endpoints antigos mantêm-se disponíveis; passaram os 33 testes de regressão.
 
@@ -42,7 +42,7 @@ Não foram enviados anúncios nem feitas alterações reais a tarefas ou stocks 
 
 ## Testes e recuperação
 
-- 29 cenários do núcleo central, com autenticação/HTTP simulados.
+- 36 cenários do núcleo central, com autenticação/HTTP simulados.
 - 33 testes de regressão da integração anterior, com serviços simulados.
 - 6 encaminhamentos do adaptador Alexa e continuidade do contexto.
 - Teste DOM da entrada, limpeza da password, envio de mensagens, continuidade assinada, ausência de tokens persistidos e saída. Não valida voz nem apresentação visual.
@@ -50,3 +50,11 @@ Não foram enviados anúncios nem feitas alterações reais a tarefas ou stocks 
 - Não foi possível instalar o Chromium neste ambiente; voz e teste visual real continuam pendentes.
 
 Para executar: `npm install`, depois `npm test` em `central-v1`. Os testes são apenas simulações. A pasta `backup` guarda os ficheiros anteriores 0.9.1 para reposição, sem alterar as variáveis. A página antiga continua no endereço anterior.
+
+## Correção 1.0.1 — pellets e transcrição
+
+A palavra ouvida «toallet» seguida de boxe provoca uma pergunta de esclarecimento; não inicia uma baixa sem o utilizador confirmar que pretendia pellets. «Pellets na boxe Lírio» pode identificar o cavalo pelo nome atual. «Regista dois sacos de cama na boxe sete do Pátio 57» é uma alternativa em português para preparar pellets, sujeita à mesma confirmação. O botão Registar pellets inicia um pedido sem assumir quantidade nem boxe.
+
+A instrução antiga que dizia à IA não haver ligação operacional foi retirada apenas da conversa central autenticada. A conversa antiga permanece limitada às ferramentas que já possuía.
+
+Para ativar esta correção: substituir o Worker completo por EVA_Worker_Central_1.0.1.txt e Deploy. Depois atualizar a página com Ctrl+F5 e voltar a entrar. Não é necessário alterar a Alexa nem o Supabase para este teste no PC. A transcrição da voz continua a depender do navegador; a correção pede esclarecimento no erro observado, não garante todas as pronúncias.

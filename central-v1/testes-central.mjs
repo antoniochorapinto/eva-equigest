@@ -29,7 +29,7 @@ async function ask(text,{state=stateToken,alexa=false,headers={},body={},token='
  const r=await worker.fetch(new Request('https://fixture'+(alexa?'/alexa/conversation':'/eva/chat'),{method:'POST',headers:{Origin:'https://antoniochorapinto.github.io',Authorization:'Bearer '+(alexa?env.EVA_ALEXA_SECRET:token),'Content-Type':'application/json',...headers},body:JSON.stringify({text,stateToken:state,...(alexa?{patioAccessToken:token,deviceHash:'a'.repeat(64)}:{}),...body})}),env);
  const d=await r.json();if(d.stateToken)stateToken=d.stateToken;return {r,d};
 }
-async function test(name,f){stateToken='';calls=[];await f();count++;console.log('OK '+name);}
+async function test(name,f){stateToken='';calls=[];user='owner-test-'+count;await f();count++;console.log('OK '+name);}
 const noWrites=()=>assert(!calls.some(c=>['complete','confirm'].includes(c.body.p_action)));
 await test('PC localiza Lírio sem segredo Alexa, sem código de acesso e sem Gemini',async()=>{const {r,d}=await ask('Localiza Lírio');assert.equal(r.status,200);assert.match(d.answer,/Lírio/);assert.equal(d.source,'eva-central');assert(calls[0].headers.Authorization==='Bearer a.b.c');});
 await test('origem diferente recusada',async()=>{const {r}=await ask('localiza Lírio',{headers:{Origin:'https://evil.example'}});assert.equal(r.status,403);assert.equal(calls.length,0);});
@@ -60,4 +60,13 @@ await test('recomeçar avisa sobre tentativa de gravação incerta',async()=>{aw
 await test('saúde sem ferramenta nunca é inventada',async()=>{const x=await ask('como está a saúde do Lírio');assert.match(x.d.answer,/ainda não está ligada/);assert.equal(calls.length,0);});
 await test('zero também cancela depois da pergunta de confirmação',async()=>{await ask('regista dois sacos de pellets na boxe sete');const x=await ask('zero');assert.match(x.d.answer,/cancelado/);await ask('sim');noWrites();});
 await test('zero após falha de gravação não promete anular movimento existente',async()=>{await ask('regista dois sacos de pellets na boxe sete');failed=true;await ask('sim');failed=false;const x=await ask('zero');assert.match(x.d.answer,/não anula uma baixa já gravada/);assert(!/Não registei/.test(x.d.answer));});
+
+await test('frase ouvida toallet na boxe Lírio exige esclarecimento antes de preparar',async()=>{let x=await ask('toallet na boxe lirio');assert.match(x.d.answer,/Pretende registar pellets/);assert.equal(calls.length,0);x=await ask('sim');assert.match(x.d.answer,/Quantos sacos/);assert(!calls.some(c=>c.body.p_action==='prepare'));x=await ask('dois');assert.match(x.d.answer,/Confirma 2 sacos/);assert.equal(calls.at(-1).body.p_box,'7');noWrites();});
+await test('não ao esclarecimento de toallet não altera stock',async()=>{await ask('toallet na boxe lirio');await ask('não');assert.equal(calls.length,0);});
+await test('pellets na boxe Lírio resolve o nome atual sem gravar',async()=>{let x=await ask('pellets na boxe Lírio');assert.match(x.d.answer,/Quantos sacos/);x=await ask('dois');assert.match(x.d.answer,/Confirma 2 sacos/);assert.equal(calls.at(-1).body.p_box,'7');noWrites();});
+await test('singular pellet não é confundido com consulta por boxe',async()=>{const x=await ask('regista um saco de pellet na boxe sete');assert.match(x.d.answer,/Confirma 1 sacos/);noWrites();});
+await test('sacos de cama com registo é alternativa portuguesa para pellets',async()=>{const x=await ask('regista dois sacos de cama na boxe sete do Pátio 57');assert.match(x.d.answer,/Confirma 2 sacos de pellets/);noWrites();});
+await test('botão inicia pellets sem assumir número de sacos ou boxe',async()=>{const x=await ask('Quero registar pellets');assert.match(x.d.answer,/Quantos sacos/);assert.equal(calls.length,0);});
+await test('conversa central não recebe a instrução antiga sem ligação operacional',async()=>{const previousFetch=globalThis.fetch;let prompt='';globalThis.fetch=async(url,init)=>{if(String(url).includes('generativelanguage.googleapis.com')){prompt=JSON.parse(init.body).systemInstruction.parts[0].text;return Response.json({candidates:[{content:{parts:[{text:'Pode dizer regista dois sacos de pellets para Lírio.'}]}}]});}return previousFetch(url,init);};try{const x=await ask('Como faço uma baixa de material?');assert.equal(x.r.status,200);assert(prompt.includes('Esta sessão está autenticada no pátio'));assert(!prompt.includes('ainda não tem uma ligação operacional autenticada'));}finally{globalThis.fetch=previousFetch;}});
+
 console.log(count+' testes do núcleo central aprovados; sem operações reais.');

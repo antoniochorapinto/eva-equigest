@@ -1,5 +1,5 @@
 'use strict';
-// EVA 1.0.0 — Skill Alexa independente da skill Pátio 57.
+// EVA 1.0.1 — Skill Alexa independente da skill Pátio 57.
 // A credencial da Alexa é lida da tabela DynamoDB da própria skill (piloto privado).
 // NUNCA escrever a chave Gemini, o código EVA web ou o segredo Alexa neste ficheiro.
 const Alexa = require('ask-sdk-core');
@@ -471,7 +471,7 @@ function centralUtterance(input){
  if(n==='EVATaskNextIntent')return 'mais tarefas';
  if(n==='EVATaskCompleteIntent')return 'conclui a tarefa '+(slot('numero')||'');
  if(n==='EVABookingConfirmIntent')return 'confirma a marcação '+(slot('numero')||'');
- if(n==='EVABookingConfirmOnlyIntent')return 'confirmar a marcação';
+ if(n==='EVABookingConfirmOnlyIntent')return 'confirmar';
  if(n==='EVATaskEmployeeIntent')return slot('funcionario')||'';
  if(TASK_EMPLOYEE_INTENTS[n])return TASK_EMPLOYEE_INTENTS[n];
  if(n==='EVAHorseSearchIntent')return 'localiza '+(slot('pergunta')||'');

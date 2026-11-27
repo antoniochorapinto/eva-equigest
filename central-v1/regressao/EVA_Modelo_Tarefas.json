@@ -1,0 +1,643 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "assistente eva",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "HelloWorldIntent",
+          "slots": [],
+          "samples": [
+            "olá",
+            "olá eva",
+            "bom dia",
+            "boa tarde",
+            "boa noite"
+          ]
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "EVAChatIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "preciso de saber {pergunta}",
+            "explica-me {pergunta}",
+            "diz-me {pergunta}",
+            "quero saber {pergunta}",
+            "pergunta {pergunta}",
+            "diz me {pergunta}",
+            "explica me {pergunta}",
+            "eva {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAOndeIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "onde fica {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAComoIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "como {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQualIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "qual {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQuaisIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "quais {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQuantosIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "quantos {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQuantasIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "quantas {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQuemIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "quem {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQuandoIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "quando {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAPorqueIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "porque {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAMotivoSeparadoIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "por que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAOQueIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "o que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVASeraIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "será que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAPodesIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "podes {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAPodeIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "pode {pergunta}"
+          ]
+        },
+        {
+          "name": "EVALembraIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "lembra-te que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAGuardaIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "guarda que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAMemorizaIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "memoriza que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAPalavraIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "a palavra {pergunta}"
+          ]
+        },
+        {
+          "name": "EVATesteIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "para o teste {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAQueIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "que {pergunta}"
+          ]
+        },
+        {
+          "name": "EVAHorseLocationIntent",
+          "slots": [
+            {
+              "name": "cavalo",
+              "type": "EVA_HORSE"
+            }
+          ],
+          "samples": [
+            "qual é a box de {cavalo}",
+            "qual é a box do {cavalo}",
+            "qual é a box da {cavalo}",
+            "em que box está {cavalo}",
+            "em que box está o {cavalo}",
+            "em que box está a {cavalo}"
+          ]
+        },
+        {
+          "name": "AMAZON.YesIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NoIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.FallbackIntent",
+          "samples": []
+        },
+        {
+          "name": "EVATaskListIntent",
+          "samples": [
+            "tarefas de hoje",
+            "quais são as tarefas de hoje",
+            "que tarefas há para fazer",
+            "lista as tarefas",
+            "diz as tarefas pendentes",
+            "tarefas pendentes",
+            "o que há para fazer hoje",
+            "todas as tarefas pendentes",
+            "lê todas as tarefas pendentes",
+            "que tarefas estão por concluir",
+            "marcações por confirmar",
+            "lê todas as tarefas por concluir",
+            "tarefas por concluir",
+            "quais são as tarefas por concluir",
+            "todas as marcações pendentes",
+            "o que falta concluir",
+            "ler tarefas pendentes"
+          ]
+        },
+        {
+          "name": "EVATaskNextIntent",
+          "samples": [
+            "mais tarefas",
+            "continua as tarefas",
+            "próximas tarefas",
+            "continua",
+            "continuar",
+            "lê as restantes tarefas"
+          ]
+        },
+        {
+          "name": "EVATaskCompleteIntent",
+          "slots": [
+            {
+              "name": "numero",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "conclui a tarefa {numero}",
+            "concluir tarefa {numero}",
+            "marca a tarefa {numero} como concluída",
+            "terminei a tarefa {numero}",
+            "tarefa {numero} concluída"
+          ]
+        },
+        {
+          "name": "EVATaskEmployeeIntent",
+          "slots": [
+            {
+              "name": "funcionario",
+              "type": "EVA_EMPLOYEE"
+            }
+          ],
+          "samples": [
+            "foi o {funcionario}",
+            "foi {funcionario}",
+            "quem fez foi {funcionario}",
+            "realizada por {funcionario}"
+          ]
+        },
+        {
+          "name": "EVATaskAntonioIntent",
+          "samples": [
+            "antónio",
+            "antônio",
+            "antonio"
+          ]
+        },
+        {
+          "name": "EVATaskViniciusIntent",
+          "samples": [
+            "vinicius",
+            "vinícius"
+          ]
+        },
+        {
+          "name": "EVATaskIgorIntent",
+          "samples": [
+            "igor"
+          ]
+        },
+        {
+          "name": "EVATaskTiagoIntent",
+          "samples": [
+            "tiago"
+          ]
+        },
+        {
+          "name": "EVABookingConfirmIntent",
+          "slots": [
+            {
+              "name": "numero",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "confirma a marcação {numero}",
+            "confirmar a marcação {numero}",
+            "aceita a marcação {numero}",
+            "confirmar marcação {numero}"
+          ]
+        },
+        {
+          "name": "EVABookingConfirmOnlyIntent",
+          "samples": [
+            "confirmar",
+            "confirma a nova marcação",
+            "confirmar a nova marcação",
+            "confirmar a marcação",
+            "confirmo"
+          ]
+        },
+        {
+          "name": "EVAPelletsBoxIntent",
+          "slots": [
+            {
+              "name": "boxe",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "sacos",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "patio",
+              "type": "EVA_PATIO"
+            }
+          ],
+          "samples": [
+            "regista {sacos} sacos de pellets na boxe {boxe}",
+            "regista {sacos} sacos de pellets na boxe {boxe} do {patio}",
+            "regista {sacos} saco de pellets na boxe {boxe}",
+            "dá baixa de {sacos} sacos de pellets na boxe {boxe}",
+            "dá baixa de {sacos} sacos de pellets na boxe {boxe} do {patio}",
+            "pellets na boxe {boxe}",
+            "pellets na boxe {boxe} do {patio}",
+            "registra {sacos} sacos de pellets na boxe {boxe}",
+            "registar {sacos} sacos de pellets na boxe {boxe}",
+            "regista {sacos} sacos de pellets na box {boxe}",
+            "regista {sacos} sacos de péletes na boxe {boxe}",
+            "registra {sacos} sacos de pellets na boxe {boxe} do {patio}",
+            "registar {sacos} sacos de pellets na boxe {boxe} do {patio}",
+            "regista {sacos} sacos de pellets na box {boxe} do {patio}",
+            "regista {sacos} sacos de péletes na boxe {boxe} do {patio}",
+            "registra {sacos} saco de pellets na boxe {boxe}",
+            "registar {sacos} saco de pellets na boxe {boxe}",
+            "regista {sacos} saco de pellets na box {boxe}",
+            "regista {sacos} saco de péletes na boxe {boxe}",
+            "dá baixa de {sacos} sacos de pellets na box {boxe}",
+            "dá baixa de {sacos} sacos de péletes na boxe {boxe}",
+            "dá baixa de {sacos} sacos de pellets na box {boxe} do {patio}",
+            "dá baixa de {sacos} sacos de péletes na boxe {boxe} do {patio}",
+            "pellets na box {boxe}",
+            "péletes na boxe {boxe}",
+            "pellets na box {boxe} do {patio}",
+            "péletes na boxe {boxe} do {patio}"
+          ]
+        },
+        {
+          "name": "EVAPelletsPatioIntent",
+          "slots": [
+            {
+              "name": "patio",
+              "type": "EVA_PATIO"
+            }
+          ],
+          "samples": [
+            "no {patio}",
+            "no pátio {patio}",
+            "os pellets são no {patio}"
+          ]
+        },
+        {
+          "name": "EVAPelletsQuantityIntent",
+          "slots": [
+            {
+              "name": "sacos",
+              "type": "AMAZON.NUMBER"
+            }
+          ],
+          "samples": [
+            "{sacos} sacos",
+            "{sacos} sacos de pellets",
+            "são {sacos} sacos",
+            "{sacos} saco"
+          ]
+        },
+        {
+          "name": "EVAHorseSearchIntent",
+          "slots": [
+            {
+              "name": "pergunta",
+              "type": "AMAZON.SearchQuery"
+            }
+          ],
+          "samples": [
+            "localiza {pergunta}",
+            "localizar {pergunta}",
+            "onde está {pergunta}",
+            "onde se encontra {pergunta}",
+            "procura o cavalo {pergunta}",
+            "procura a égua {pergunta}"
+          ]
+        },
+        {
+          "name": "EVABoxLocationIntent",
+          "slots": [
+            {
+              "name": "boxe",
+              "type": "AMAZON.NUMBER"
+            },
+            {
+              "name": "patio",
+              "type": "EVA_PATIO"
+            }
+          ],
+          "samples": [
+            "quem está na boxe {boxe}",
+            "quem está na box {boxe}",
+            "quem está na boxe {boxe} do {patio}",
+            "quem está na box {boxe} do {patio}",
+            "qual é o cavalo da boxe {boxe}",
+            "qual cavalo está na boxe {boxe}",
+            "que cavalo está na boxe {boxe}",
+            "quem está na boxe número {boxe}"
+          ]
+        },
+        {
+          "name": "EVARestartIntent",
+          "samples": [
+            "recomeçar",
+            "recomeça",
+            "novo pedido",
+            "começar de novo"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "EVA_HORSE",
+          "values": [
+            {
+              "id": "EXAMPLE_ONLY",
+              "name": {
+                "value": "cavalo de exemplo"
+              }
+            }
+          ]
+        },
+        {
+          "name": "EVA_EMPLOYEE",
+          "values": [
+            {
+              "name": {
+                "value": "António",
+                "synonyms": [
+                  "Antonio",
+                  "Antônio"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Vinicius",
+                "synonyms": [
+                  "Vinícius"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Igor",
+                "synonyms": []
+              }
+            },
+            {
+              "name": {
+                "value": "Tiago",
+                "synonyms": []
+              }
+            }
+          ]
+        },
+        {
+          "name": "EVA_PATIO",
+          "values": [
+            {
+              "name": {
+                "value": "Pátio 57",
+                "synonyms": [
+                  "cinquenta e sete",
+                  "pátio cinquenta e sete"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Pátio Dr. Pedro",
+                "synonyms": [
+                  "Dr. Pedro",
+                  "doutor pedro"
+                ]
+              }
+            },
+            {
+              "name": {
+                "value": "Pátio Rita Castelo Branco",
+                "synonyms": [
+                  "Rita Castelo Branco",
+                  "P quarenta e nove"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

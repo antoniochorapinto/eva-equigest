@@ -1,0 +1,119 @@
+<!doctype html><html lang="pt-PT"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#101b2b"><title>EVA — Pátio</title><style>:root{font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:#eef3fa;background:#0d1522}*{box-sizing:border-box}body{margin:0;min-height:100dvh;background:radial-gradient(circle at 50% 10%,#253e50,#0d1522 55%)}main{max-width:720px;margin:auto;padding:22px 18px 35px}.head{display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;letter-spacing:.14em;font-size:24px}.tag{font-size:12px;color:#a8bbc9}.pill{font-size:12px;border:1px solid #38546a;border-radius:30px;padding:7px 11px;color:#b9d7d7}.orb{width:154px;height:154px;margin:32px auto 18px;border-radius:50%;background:radial-gradient(circle at 35% 32%,#ffe2b5,#e99451 28%,#bc5a35 52%,#4e396c 75%,#1d3550);box-shadow:0 0 65px #d9835840,inset -12px -15px 28px #07122270;transition:transform .2s}.orb.active{animation:pulse 1.4s infinite alternate}@keyframes pulse{to{transform:scale(1.06);box-shadow:0 0 85px #f3a35d90}}h1{text-align:center;font-size:25px;margin:0 0 8px}p.sub{text-align:center;color:#a8b8c7;font-size:14px;margin:0 0 20px}.panel{background:#172638d9;border:1px solid #304354;border-radius:18px;padding:16px;margin-top:14px}.status{color:#e9ad77;font-size:13px;margin-bottom:12px}.chat{height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:10px}.msg{max-width:90%;border-radius:15px;padding:11px 13px;font-size:14px;line-height:1.5;white-space:pre-wrap}.eva{align-self:flex-start;background:#2a3d4c}.user{align-self:flex-end;background:#875338}.controls{display:flex;gap:9px;margin-top:13px}button,input{font:inherit}button{border:0;border-radius:12px;padding:13px 15px;cursor:pointer;font-weight:650}button.primary{background:#f2a66c;color:#251c19}button.secondary{background:#34485b;color:#fff}button:disabled{opacity:.45;cursor:not-allowed}input{flex:1;min-width:0;border:1px solid #526070;border-radius:12px;background:#0e1a29;color:white;padding:12px}small{color:#9aaebe;display:block;line-height:1.5;margin-top:12px}.examples{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.examples button{font-size:12px;padding:9px 11px;background:#2a3b4b;color:#e8eef3}.settings{display:flex;align-items:center;justify-content:space-between;gap:10px;color:#cbd8e0;font-size:13px;margin-top:14px}.footer{text-align:center;color:#8398a8;font-size:12px;margin-top:22px}.connection{border:1px solid #456075;border-radius:14px;padding:14px;background:#122537;margin-bottom:16px}.connection strong{display:block;font-size:15px;margin-bottom:7px}.connection p{font-size:12px;color:#b8c9d5;line-height:1.5}.connection label{display:block;font-size:12px;margin:8px 0 3px}.connection input{width:100%;margin-bottom:8px}.connection button{margin:5px 6px 4px 0}</style></head><body><main><div class="head"><div><div class="brand">EVA<span style="color:#efa16a">.</span></div><div class="tag">Assistente do pátio</div></div><div class="pill">EVA 1.0 · Teste direto</div></div><div id="orb" class="orb" aria-hidden="true"></div><h1>Olá! Sou a EVA.</h1><p class="sub">A tua colega digital. Vamos conversar?</p><section class="panel"><div class="connection"><strong>Entrar no pátio</strong><p>Use a sua conta do Pátio 57. As permissões da aplicação também se aplicam aqui.</p><form id="login"><label for="email">E-mail</label><input id="email" type="email" autocomplete="username" required><label for="password">Palavra-passe</label><input id="password" type="password" autocomplete="current-password" required><button class="primary" id="connect" type="submit">Entrar</button></form><button class="secondary" id="disconnect" hidden>Sair</button><p id="connectionStatus" role="status">Ainda não ligada ao pátio.</p></div><div id="status" class="status" role="status">À espera de entrada no pátio</div><div id="chat" class="chat" aria-live="polite"><div class="msg eva">Olá! Sou a EVA. Entre na sua conta para consultar o pátio e dar instruções.</div></div><div class="settings"><button id="handsFree" type="button" class="secondary" aria-pressed="false">🎧 Iniciar conversa mãos-livres</button><span id="handsFreeState">Desligado</span></div><div class="controls"><button id="mic" class="primary" type="button">🎙️ Falar</button><input id="entry" aria-label="Mensagem" placeholder="Escreve aqui..." autocomplete="off"><button id="send" class="secondary" type="button">Enviar</button></div><div class="examples"><button data-q="Olá EVA, como estás?">Cumprimentar</button><button data-q="Lê todas as tarefas pendentes">Tarefas de hoje</button><button data-q="Regista dois sacos de pellets na boxe 7">Registar pellets</button><button data-q="Conclui a tarefa dois">Concluir tarefa</button></div><div class="settings"><button class="secondary" type="button" id="clear">Limpar conversa</button><span>Conversa desta sessão · Sair limpa os dados</span></div><div class="settings"><label><input id="voice" type="checkbox" checked> Respostas faladas</label><span id="voiceName">Voz do dispositivo</span></div><small>Se a escuta terminar, a mensagem de erro ficará visível acima da conversa. O reconhecimento de voz do Chrome pode exigir Internet. No iPhone, o microfone pode não funcionar ao abrir este ficheiro diretamente; nesse caso, usa o campo de texto. O modo mãos-livres funciona apenas enquanto esta página estiver aberta e ativa. Pode parar devido a limitações do navegador. Não é ativação permanente por «Olá, EVA».</small></section><div class="footer">EVA 1.0 · Ligação direta ao pátio</div></main><script>
+'use strict';
+const $=s=>document.querySelector(s);
+const chat=$('#chat'),statusEl=$('#status'),orb=$('#orb'),input=$('#entry'),mic=$('#mic'),mode=$('#voice');
+const connectBtn=$('#connect'),disconnectBtn=$('#disconnect'),connectionStatus=$('#connectionStatus');
+const endpoint='https://eva-ia-equigest.antoniochorapinto.workers.dev',patioBase='https://whypekodiqdgfbzoakry.supabase.co',pubkey='sb_publishable_AFSkbgxAABVpL1MpipxFdA_l8FeVVRY';
+let token='',history=[],stateToken='',busy=false,authExpires=0,sessionGeneration=0;
+try{mode.checked=localStorage.getItem('eva-response-mode')!=='text';}catch{}
+const setStatus=t=>statusEl.textContent=t;
+function add(t,who){const e=document.createElement('div');e.className='msg '+who;e.textContent=t;chat.appendChild(e);chat.scrollTop=chat.scrollHeight;}
+function preferredVoice(){if(!('speechSynthesis'in window))return null;const v=speechSynthesis.getVoices();return v.find(x=>/^pt-PT$/i.test(x.lang)&&/female|maria|joana|helena|ines|inês|catarina|sofia/i.test(x.name))||v.find(x=>/^pt-PT$/i.test(x.lang))||v.find(x=>/^pt/i.test(x.lang))||null;}
+function updateVoice(){const v=preferredVoice();$('#voiceName').textContent=v?'Voz disponível: '+v.name:'Voz portuguesa não encontrada neste dispositivo';}
+let handsFree=false,speakingNow=false,awaitingAnswer=false,relistenTimer=null;
+let restartVoice=()=>{};
+function speak(t,force){
+ if((!mode.checked&&!force)||!('speechSynthesis'in window)){if(handsFree)restartVoice();return;}
+ speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang='pt-PT';u.rate=.96;const v=preferredVoice();if(v)u.voice=v;
+ speakingNow=true;u.onend=()=>{speakingNow=false;if(handsFree)restartVoice();};
+ u.onerror=()=>{speakingNow=false;if(handsFree)restartVoice();};speechSynthesis.speak(u);
+}
+mode.addEventListener('change',()=>{try{localStorage.setItem('eva-response-mode',mode.checked?'voice':'text')}catch{}if(!mode.checked&&'speechSynthesis'in window)speechSynthesis.cancel();});
+
+if('speechSynthesis'in window){speechSynthesis.onvoiceschanged=updateVoice;updateVoice();}
+function setConnected(yes){$('#login').hidden=yes;disconnectBtn.hidden=!yes;input.disabled=!yes;$('#send').disabled=!yes;document.querySelectorAll('[data-q]').forEach(b=>b.disabled=!yes);mic.disabled=!yes||!(window.SpeechRecognition||window.webkitSpeechRecognition);}
+setConnected(false);
+async function post(path,data,authorization){
+ const res=await fetch(endpoint+path,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+authorization},body:JSON.stringify(data),signal:AbortSignal.timeout(27000),credentials:'omit',redirect:'error',cache:'no-store'});
+ let d;try{d=await res.json();}catch{throw Error('O serviço EVA precisa de ser atualizado para a ligação direta.');}
+ if(!res.ok){if(d.code==='EVA_CONTEXT_EXPIRED'){stateToken='';throw Error('A conversa expirou. Repita o pedido.');}throw Error(d.error||'Não consegui contactar a EVA.');}return d;
+}
+$('#login').onsubmit=async event=>{
+ event.preventDefault();if(connectBtn.disabled)return;connectBtn.disabled=true;connectionStatus.textContent='A entrar...';
+ try{
+  const email=$('#email').value.trim(),password=$('#password').value;$('#password').value='';
+  const res=await fetch(patioBase+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:pubkey,'Content-Type':'application/json'},body:JSON.stringify({email,password}),signal:AbortSignal.timeout(12000),credentials:'omit',redirect:'error',cache:'no-store'});
+  if(!res.ok)throw Error('Não consegui entrar. Confirme o e-mail e a palavra-passe do Pátio 57.');
+  const d=await res.json();if(!d.access_token)throw Error('Não foi recebida uma sessão.');
+  token=d.access_token;authExpires=Date.now()+Number(d.expires_in||3600)*1000;stateToken='';sessionGeneration++;history=[];chat.replaceChildren();setConnected(true);connectionStatus.textContent='Ligada ao pátio. A sessão fica apenas nesta página.';setStatus('Pronta para ouvir');add('Estou pronta. Pode pedir as tarefas pendentes ou localizar um cavalo.','eva');
+ }catch(e){connectionStatus.textContent=e.message;}finally{connectBtn.disabled=false;}
+};
+disconnectBtn.onclick=()=>{const oldToken=token;sessionGeneration++;token='';stateToken='';history=[];chat.replaceChildren();setConnected(false);$('#email').value='';connectionStatus.textContent='Desligada do pátio.';setStatus('À espera de entrada');if('speechSynthesis'in window)speechSynthesis.cancel();if(oldToken)fetch(patioBase+'/auth/v1/logout?scope=local',{method:'POST',headers:{apikey:pubkey,Authorization:'Bearer '+oldToken},credentials:'omit',redirect:'error'}).catch(()=>{});};
+async function respond(q){
+q=q.trim();if(!q||busy)return;if(!token||Date.now()>=authExpires){setStatus('Entre na sua conta do pátio.');if(token)disconnectBtn.click();return;}const generation=sessionGeneration;
+busy=true;awaitingAnswer=true;input.disabled=true;$('#send').disabled=true;mic.disabled=true;orb.classList.add('active');add(q,'user');setStatus('A pensar...');
+const current=[...history.slice(-12),{role:'user',text:q}];
+try{const d=await post('/eva/chat',{text:q,stateToken},token);if(generation!==sessionGeneration)return;stateToken=d.stateToken||'';const answer=(d.answer||'').trim();if(!answer)throw Error('Resposta vazia.');history=[...current,{role:'model',text:answer}].slice(-12);add(answer,'eva');setStatus('Pronta para conversar');speak(answer,false);}
+catch(e){if(generation!==sessionGeneration)return;const message=e.name==='AbortError'?'A resposta demorou demasiado.':e.message;add('Não consegui responder: '+message,'eva');setStatus('Ocorreu um erro');if(/sessão.*terminou/i.test(message))disconnectBtn.click();}
+finally{busy=false;awaitingAnswer=false;input.disabled=!token;$('#send').disabled=!token;mic.disabled=!token||!(window.SpeechRecognition||window.webkitSpeechRecognition);orb.classList.remove('active');if(handsFree&&!speakingNow)restartVoice();}
+}
+$('#send').onclick=()=>{const q=input.value.trim();if(q){input.value='';respond(q);}};
+input.addEventListener('keydown',e=>{if(e.key==='Enter'){$('#send').click();}});
+document.querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>respond(b.dataset.q));
+$('#clear').onclick=()=>{stateToken='';history=[];chat.replaceChildren();add('Conversa limpa. Como posso ajudar?','eva');if('speechSynthesis'in window)speechSynthesis.cancel();};
+
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const handsButton=$('#handsFree'),handsState=$('#handsFreeState');
+let stopHandsFree=()=>{};
+disconnectBtn.addEventListener('click',()=>stopHandsFree());
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&handsFree)stopHandsFree('Parei a escuta porque a aplicação deixou de estar visível.');});
+if(SR){
+ const rec=new SR();rec.lang='pt-PT';rec.interimResults=true;rec.continuous=false;rec.maxAlternatives=1;
+ let listening=false,recognized=false,lastError='',starting=false,expectedStop=false,idleFailures=0,networkFailures=0;
+ const messages={'no-speech':'Não detetei fala.','audio-capture':'O navegador não conseguiu captar o microfone.','not-allowed':'O acesso ao microfone foi recusado.','service-not-allowed':'O serviço de reconhecimento de voz não foi autorizado.','network':'O serviço de reconhecimento de voz falhou na ligação à rede.','language-not-supported':'Português de Portugal não suportado neste navegador.','aborted':'Escuta interrompida.','bad-grammar':'Não foi possível reconhecer as palavras.'};
+ function updateHF(){handsButton.textContent=handsFree?'⏹️ Parar conversa mãos-livres':'🎧 Iniciar conversa mãos-livres';handsButton.setAttribute('aria-pressed',String(handsFree));handsState.textContent=handsFree?'Ativo enquanto a página estiver aberta':'Desligado';}
+ stopHandsFree=(message='Conversa mãos-livres desligada.')=>{
+  handsFree=false;clearTimeout(relistenTimer);relistenTimer=null;idleFailures=0;networkFailures=0;
+  if(listening||starting){expectedStop=true;try{rec.abort();}catch{}}
+  if('speechSynthesis'in window)speechSynthesis.cancel();
+  speakingNow=false;updateHF();setStatus(message);
+ };
+ function startListening(){
+  if(!token||busy||awaitingAnswer||speakingNow||listening||starting||document.hidden)return;
+  clearTimeout(relistenTimer);relistenTimer=null;
+  try{recognized=false;lastError='';expectedStop=false;starting=true;setStatus('A ativar o microfone...');rec.start();}
+  catch(e){starting=false;setStatus('Não foi possível iniciar o reconhecimento ('+(e.name||'erro')+').');if(handsFree)stopHandsFree('Falha ao iniciar o reconhecimento. Reinicia manualmente a conversa.');}
+ }
+ restartVoice=()=>{
+  if(!handsFree||!token||busy||awaitingAnswer||speakingNow||listening||starting||document.hidden)return;
+  clearTimeout(relistenTimer);relistenTimer=setTimeout(startListening,800);
+ };
+ handsButton.onclick=()=>{
+  if(handsFree){stopHandsFree();return;}
+  if(!token){setStatus('Entre primeiro na sua conta do pátio.');return;}
+  handsFree=true;idleFailures=0;networkFailures=0;updateHF();
+  if('speechSynthesis'in window)speechSynthesis.cancel();
+  if(!listening&&!starting)startListening();
+  else setStatus('Conversa mãos-livres ativa. Podes falar.');
+ };
+ rec.onstart=()=>{starting=false;listening=true;setStatus('🎙️ Estou a ouvir. Fala agora...');orb.classList.add('active');mic.textContent='⏹️ Parar';};
+ rec.onspeechstart=()=>setStatus('🎙️ Estou a reconhecer a tua pergunta...');
+ rec.onresult=e=>{
+  const result=e.results[e.resultIndex];if(!result)return;
+  const transcript=result[0]?.transcript?.trim();
+  if(transcript&&!result.isFinal){setStatus('A ouvir: '+transcript);return;}
+  if(transcript){recognized=true;idleFailures=0;networkFailures=0;lastError='';setStatus('Percebi: '+transcript);expectedStop=true;try{rec.stop();}catch{}respond(transcript);}
+ };
+ rec.onnomatch=()=>{lastError='Não consegui compreender as palavras.';setStatus(lastError);};
+ rec.onerror=e=>{
+  starting=false;lastError=messages[e.error]||('Erro de reconhecimento: '+e.error);
+  if(expectedStop)return;
+  setStatus('🎙️ '+lastError);
+  if(e.error==='network'){networkFailures++;if(handsFree&&networkFailures>=2)stopHandsFree('A escuta parou: o serviço de voz falhou na rede. Experimenta o Microsoft Edge.');}
+  if(['not-allowed','service-not-allowed','audio-capture','language-not-supported'].includes(e.error)&&handsFree)stopHandsFree('A escuta parou: '+lastError);
+  if(e.error==='no-speech'&&handsFree){idleFailures++;if(idleFailures>=5)stopHandsFree('Parei a escuta após várias tentativas sem fala. Carrega novamente para continuar.');}
+ };
+ rec.onend=()=>{
+  listening=false;starting=false;mic.textContent='🎙️ Falar';orb.classList.toggle('active',busy);
+  if(expectedStop){expectedStop=false;return;}
+  if(!handsFree&&!busy&&!recognized&&!lastError)setStatus('A escuta terminou sem reconhecer a pergunta. Tenta novamente.');
+  if(handsFree&&!busy&&!awaitingAnswer&&!speakingNow)restartVoice();
+ };
+ mic.onclick=()=>{
+  if(!token||busy)return;
+  if(listening||starting){if(handsFree)stopHandsFree();else{expectedStop=true;rec.abort();setStatus('Escuta interrompida.');}return;}
+  if('speechSynthesis'in window)speechSynthesis.cancel();speakingNow=false;startListening();
+ };
+ updateHF();
+}else{mic.disabled=true;mic.textContent='Microfone indisponível';handsButton.disabled=true;handsState.textContent='Não suportado neste navegador';}
+</script></body></html>

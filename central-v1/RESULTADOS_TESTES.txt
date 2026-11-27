@@ -1,0 +1,70 @@
+OK PC localiza Lírio sem segredo Alexa, sem código de acesso e sem Gemini
+OK origem diferente recusada
+OK JWT ausente recusado
+OK sessão inválida recusada antes de consultar dados
+OK Alexa continua a exigir segredo e aparelho autorizado
+OK PC e Alexa devolvem a mesma consulta através do núcleo
+OK 12 tarefas são paginadas sem omissões
+OK mudança da lista reinicia paginação
+OK concluir exige lista, confirmação e funcionário
+OK sem lista não se pode concluir por número
+OK funcionário não permitido não conclui
+OK confirmar marcação não equivale a concluir
+OK nova consulta abandona tarefa por confirmar
+OK pellets pede quantidade e zero cancela sem baixa
+OK zero no pedido inicial não chama RPC de stock
+OK 0 numérico também cancela
+OK pellets prepara, confirma e só depois grava
+OK pellets por stable name consulta os cavalos atuais
+OK boxe em falta é recolhida sem ser confundida com consulta de cavalos
+OK boxe ambígua pede pátio e preserva quantidade
+OK não cancela confirmação sem gravar
+OK contexto alterado pelo cliente é recusado
+OK contexto de outra conta é recusado
+OK contexto da web não pode ser usado no aparelho Alexa
+OK falha no servidor nunca anuncia sucesso; retry conserva confirmação
+OK recomeçar avisa sobre tentativa de gravação incerta
+OK saúde sem ferramenta nunca é inventada
+OK zero também cancela depois da pergunta de confirmação
+OK zero após falha de gravação não promete anular movimento existente
+29 testes do núcleo central aprovados; sem operações reais.
+
+Adaptador Alexa: 6 encaminhamentos e continuidade para a EVA central aprovados.
+
+OK 12 tarefas lidas com sim/continua sem omissões
+OK pedido por concluir encaminhado para tarefas
+OK marcação por confirmar permanece legível
+OK mudança durante paginação recomeça em zero
+OK lista expirada exige nova consulta
+OK rótulos longos não cortam a meio da tarefa
+OK resposta inválida não cria lista selecionável
+OK pellets pede pátio perante boxe ambígua
+OK pellets confirma e completa sem segunda preparação
+OK zero cancela sem contactar o servidor
+OK pellets negativa não escreve
+OK falha ao concluir mantém o mesmo identificador para recuperar
+OK novo pedido de tarefas abandona pellets por confirmar
+OK Worker tarefas funciona sem Gemini e transmite paginação
+OK Worker recusa dispositivo não autorizado
+OK Worker valida quantidade pellets e não chama RPC
+OK Worker pellets preserva JWT individual
+OK Worker recusa operações desativadas
+OK modelo contém todos os handlers e sem amostras duplicadas
+OK Voice Monkey anuncia data/hora e exige abertura da EVA
+OK Voice Monkey rejeita datas inválidas
+OK Voice Monkey recusa webhook sem segredo
+OK Voice Monkey não envia quando a base recusa o claim
+23 testes aprovados. SQL e reprodução física no Echo exigem validação separada.
+OK localiza Lírio sem catálogo consulta o servidor e limpa apenas pedidos pendentes
+OK consulta por número tem comando próprio e inclui o pátio indicado
+OK pergunta por quantidade repete a quantidade em falta e não conversa geral
+OK pedido de pellets expirado não retém a conversa anterior
+OK recomeçar limpa todas as pendências e conserva catálogo; avisa sobre resultado incerto
+OK trinta consultas seguidas por nome sem Gemini não consomem o limite da IA
+OK vinte preparações de pellets não partilham limite com consultas por nome
+OK IA conserva limite de doze sem bloquear consultas operacionais
+OK consulta por boxe filtra o pátio e dispensa catálogo
+OK limite de leitura é explícito e isolado por conta mesmo atrás do mesmo IP
+Total: 33 testes JavaScript aprovados, com serviços simulados e sem baixas reais.
+
+Interface DOM aprovada com HTTP simulado. Chromium/voz real não verificados.
